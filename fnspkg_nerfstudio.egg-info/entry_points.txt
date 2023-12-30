@@ -1,0 +1,3 @@
+[nerfstudio.method_configs]
+fnspkg = fnspkg.fnspkg_configs:fnspkg_method
+fnspkg_dynamic = fnspkg.fnspkg_configs:fnspkg_dynamic_method

@@ -1,0 +1,9 @@
+Metadata-Version: 2.1
+Name: fnspkg-nerfstudio
+Version: 0.1.0
+Summary: F_Nspkg nerfstudio integration
+Author-email: fjn <2531311733@qq.com>
+License: Test
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: nerfstudio>=0.2.0

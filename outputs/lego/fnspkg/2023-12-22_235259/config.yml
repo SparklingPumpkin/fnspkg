@@ -1,0 +1,188 @@
+!!python/object:nerfstudio.engine.trainer.TrainerConfig
+_target: !!python/name:nerfstudio.engine.trainer.Trainer ''
+data: &id003 !!python/object/apply:pathlib.WindowsPath
+- E:\
+- C_projects
+- NeRF
+- Nerfstudio
+- nerfstudio
+- data
+- blender
+- lego
+experiment_name: lego
+gradient_accumulation_steps: {}
+load_checkpoint: null
+load_config: null
+load_dir: null
+load_scheduler: true
+load_step: null
+log_gradients: false
+logging: !!python/object:nerfstudio.configs.base_config.LoggingConfig
+  local_writer: !!python/object:nerfstudio.configs.base_config.LocalWriterConfig
+    _target: !!python/name:nerfstudio.utils.writer.LocalWriter ''
+    enable: true
+    max_log_size: 10
+    stats_to_track: !!python/tuple
+    - !!python/object/apply:nerfstudio.utils.writer.EventName
+      - Train Iter (time)
+    - !!python/object/apply:nerfstudio.utils.writer.EventName
+      - Train Rays / Sec
+    - !!python/object/apply:nerfstudio.utils.writer.EventName
+      - Test PSNR
+    - !!python/object/apply:nerfstudio.utils.writer.EventName
+      - Vis Rays / Sec
+    - !!python/object/apply:nerfstudio.utils.writer.EventName
+      - Test Rays / Sec
+    - !!python/object/apply:nerfstudio.utils.writer.EventName
+      - ETA (time)
+  max_buffer_size: 20
+  profiler: basic
+  relative_log_dir: !!python/object/apply:pathlib.WindowsPath []
+  steps_per_log: 10
+machine: !!python/object:nerfstudio.configs.base_config.MachineConfig
+  device_type: cuda
+  dist_url: auto
+  machine_rank: 0
+  num_devices: 1
+  num_machines: 1
+  seed: 42
+max_num_iterations: 30001
+method_name: fnspkg
+mixed_precision: true
+optimizers:
+  fields:
+    optimizer: !!python/object:nerfstudio.engine.optimizers.AdamOptimizerConfig
+      _target: &id001 !!python/name:torch.optim.adam.Adam ''
+      eps: 1.0e-12
+      lr: 0.01
+      max_norm: null
+      weight_decay: 0
+    scheduler: !!python/object:nerfstudio.engine.schedulers.CosineDecaySchedulerConfig
+      _target: &id002 !!python/name:nerfstudio.engine.schedulers.CosineDecayScheduler ''
+      learning_rate_alpha: 0.05
+      max_steps: 30000
+      warm_up_end: 512
+  proposal_networks:
+    optimizer: !!python/object:nerfstudio.engine.optimizers.AdamOptimizerConfig
+      _target: *id001
+      eps: 1.0e-12
+      lr: 0.01
+      max_norm: null
+      weight_decay: 0
+    scheduler: !!python/object:nerfstudio.engine.schedulers.CosineDecaySchedulerConfig
+      _target: *id002
+      learning_rate_alpha: 0.05
+      max_steps: 30000
+      warm_up_end: 512
+output_dir: !!python/object/apply:pathlib.WindowsPath
+- outputs
+pipeline: !!python/object:nerfstudio.pipelines.base_pipeline.VanillaPipelineConfig
+  _target: !!python/name:nerfstudio.pipelines.base_pipeline.VanillaPipeline ''
+  datamanager: !!python/object:nerfstudio.data.datamanagers.base_datamanager.VanillaDataManagerConfig
+    _target: !!python/name:nerfstudio.data.datamanagers.base_datamanager.VanillaDataManager ''
+    camera_optimizer: null
+    camera_res_scale_factor: 1.0
+    collate_fn: !!python/name:nerfstudio.data.utils.nerfstudio_collate.nerfstudio_collate ''
+    data: *id003
+    dataparser: !!python/object:nerfstudio.data.dataparsers.blender_dataparser.BlenderDataParserConfig
+      _target: !!python/name:nerfstudio.data.dataparsers.blender_dataparser.Blender ''
+      alpha_color: white
+      data: !!python/object/apply:pathlib.WindowsPath
+      - data
+      - blender
+      - lego
+      scale_factor: 1.0
+    eval_image_indices: !!python/tuple
+    - 0
+    eval_num_images_to_sample_from: -1
+    eval_num_rays_per_batch: 4096
+    eval_num_times_to_repeat_images: -1
+    images_on_gpu: false
+    masks_on_gpu: false
+    patch_size: 1
+    pixel_sampler: !!python/object:nerfstudio.data.pixel_samplers.PixelSamplerConfig
+      _target: !!python/name:nerfstudio.data.pixel_samplers.PixelSampler ''
+      fisheye_crop_radius: null
+      is_equirectangular: false
+      keep_full_image: false
+      num_rays_per_batch: 4096
+    train_num_images_to_sample_from: -1
+    train_num_rays_per_batch: 4096
+    train_num_times_to_repeat_images: -1
+  model: !!python/object:fnspkg.fnspkg.FNspkgModelConfig
+    _target: !!python/name:fnspkg.fnspkg.FNspkgModel ''
+    appearance_embedding_dim: 0
+    background_color: white
+    collider_params:
+      far_plane: 6.0
+      near_plane: 2.0
+    concat_features_across_scales: true
+    enable_collider: true
+    eval_num_rays_per_chunk: 32768
+    far_plane: 100.0
+    grid_base_resolution:
+    - 128
+    - 128
+    - 128
+    grid_feature_dim: 32
+    is_contracted: false
+    loss_coefficients:
+      distortion: 0.01
+      interlevel: 1.0
+      plane_tv: 0.01
+      plane_tv_proposal_net: 0.0001
+    multiscale_res:
+    - 1
+    - 2
+    - 4
+    near_plane: 1.0
+    num_proposal_iterations: 2
+    num_proposal_samples: !!python/tuple
+    - 256
+    - 128
+    num_samples: 48
+    prompt: null
+    proposal_net_args_list:
+    - num_output_coords: 8
+      resolution:
+      - 128
+      - 128
+      - 128
+    - num_output_coords: 8
+      resolution:
+      - 256
+      - 256
+      - 256
+    proposal_update_every: 5
+    proposal_warmup: 5000
+    proposal_weights_anneal_max_num_iters: 1000
+    proposal_weights_anneal_slope: 10.0
+    single_jitter: false
+    use_average_appearance_embedding: true
+    use_proposal_weight_anneal: true
+    use_same_proposal_network: false
+project_name: nerfstudio-project
+prompt: null
+relative_model_dir: !!python/object/apply:pathlib.WindowsPath
+- nerfstudio_models
+save_only_latest_checkpoint: true
+steps_per_eval_all_images: 30000
+steps_per_eval_batch: 500
+steps_per_eval_image: 500
+steps_per_save: 2000
+timestamp: 2023-12-22_235259
+use_grad_scaler: false
+viewer: !!python/object:nerfstudio.configs.base_config.ViewerConfig
+  camera_frustum_scale: 0.1
+  default_composite_depth: true
+  image_format: jpeg
+  jpeg_quality: 75
+  make_share_url: false
+  max_num_display_images: 512
+  num_rays_per_chunk: 32768
+  quit_on_train_completion: false
+  relative_log_filename: viewer_log_filename.txt
+  websocket_host: 0.0.0.0
+  websocket_port: null
+  websocket_port_default: 7007
+vis: viewer

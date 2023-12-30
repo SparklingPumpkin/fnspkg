@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+authors = [
+    {name = "fjn", email = "2531311733@qq.com"},
+]
+name = "fnspkg_nerfstudio"
+description = "F_Nspkg nerfstudio integration"
+readme = "README.md"
+license = {text = "Test"}
+dependencies=[
+    "nerfstudio>=0.2.0"
+]
+dynamic = ["version"]
+
+[project.entry-points."nerfstudio.method_configs"]
+fnspkg = "fnspkg.fnspkg_configs:fnspkg_method"
+fnspkg_dynamic = "fnspkg.fnspkg_configs:fnspkg_dynamic_method"
+
+[tool.setuptools]
+include-package-data = true
+packages = [
+    "fnspkg"
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "fnspkg.__version__" }

@@ -1,0 +1,14 @@
+LICENSE.txt
+README.md
+pyproject.toml
+fnspkg/__init__.py
+fnspkg/fnspkg.py
+fnspkg/fnspkg_configs.py
+fnspkg/fnspkg_encodings.py
+fnspkg/fnspkg_field.py
+fnspkg_nerfstudio.egg-info/PKG-INFO
+fnspkg_nerfstudio.egg-info/SOURCES.txt
+fnspkg_nerfstudio.egg-info/dependency_links.txt
+fnspkg_nerfstudio.egg-info/entry_points.txt
+fnspkg_nerfstudio.egg-info/requires.txt
+fnspkg_nerfstudio.egg-info/top_level.txt
